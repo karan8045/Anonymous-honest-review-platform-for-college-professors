@@ -97,53 +97,63 @@ ALTER TABLE public.opinions ENABLE ROW LEVEL SECURITY;
 
 -- Institutions RLS
 -- Anyone can read institutions
+DROP POLICY IF EXISTS "Institutions are viewable by everyone" ON public.institutions;
 CREATE POLICY "Institutions are viewable by everyone" 
     ON public.institutions FOR SELECT 
     USING (true);
 
 -- Authenticated users can insert user-submitted institutions
+DROP POLICY IF EXISTS "Authenticated users can submit new institutions" ON public.institutions;
 CREATE POLICY "Authenticated users can submit new institutions" 
     ON public.institutions FOR INSERT 
     WITH CHECK (auth.role() = 'authenticated' AND source = 'user_submitted' AND verified = false);
 
 -- Profiles RLS
 -- Anyone can view usernames and public profile info
+DROP POLICY IF EXISTS "Public profiles are viewable by everyone" ON public.profiles;
 CREATE POLICY "Public profiles are viewable by everyone" 
     ON public.profiles FOR SELECT 
     USING (true);
 
 -- Users can insert and update their own profile only
+DROP POLICY IF EXISTS "Users can create their own profile" ON public.profiles;
 CREATE POLICY "Users can create their own profile" 
     ON public.profiles FOR INSERT 
     WITH CHECK (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile" 
     ON public.profiles FOR UPDATE 
     USING (auth.uid() = id);
 
 -- Ratings RLS
 -- Everyone can read ratings summary/aggregates
+DROP POLICY IF EXISTS "Ratings are viewable by everyone" ON public.ratings;
 CREATE POLICY "Ratings are viewable by everyone" 
     ON public.ratings FOR SELECT 
     USING (true);
 
 -- Authenticated users can insert their own rating (enforced by UNIQUE constraint)
+DROP POLICY IF EXISTS "Users can insert their own rating" ON public.ratings;
 CREATE POLICY "Users can insert their own rating" 
     ON public.ratings FOR INSERT 
     WITH CHECK (auth.uid() = user_id);
 
 -- Authenticated users can update their own rating
+DROP POLICY IF EXISTS "Users can update their own rating" ON public.ratings;
 CREATE POLICY "Users can update their own rating" 
     ON public.ratings FOR UPDATE 
     USING (auth.uid() = user_id);
 
 -- Opinions RLS
 -- Anyone can read opinions
+DROP POLICY IF EXISTS "Opinions are viewable by everyone" ON public.opinions;
 CREATE POLICY "Opinions are viewable by everyone" 
     ON public.opinions FOR SELECT 
     USING (true);
 
 -- Authenticated users can insert opinions
+DROP POLICY IF EXISTS "Users can insert their own opinions" ON public.opinions;
 CREATE POLICY "Users can insert their own opinions" 
     ON public.opinions FOR INSERT 
     WITH CHECK (auth.uid() = user_id);
