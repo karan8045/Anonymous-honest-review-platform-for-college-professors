@@ -48,6 +48,7 @@ export async function POST(req: NextRequest) {
         id: opinion.id,
         institution_id: opinion.institution_id,
         author_username: opinion.author_username,
+        author_avatar: opinion.author_avatar,
         content: opinion.content,
         created_at: opinion.created_at,
         is_current_user: true,

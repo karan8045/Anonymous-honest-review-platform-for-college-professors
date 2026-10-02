@@ -1,5 +1,7 @@
 export type InstitutionSource = 'official_database' | 'user_submitted' | 'owner_added';
 
+export type AvatarType = 'male' | 'female';
+
 export interface User {
   id: string; // Internal UUID
   username: string; // Public pseudonym
@@ -10,6 +12,7 @@ export interface User {
 export interface Profile {
   id: string; // References User.id
   username: string;
+  avatar: AvatarType; // Compulsory avatar selection: only 'male' or 'female'
   country: string;
   institution_id: string;
   institution_name?: string;
@@ -47,6 +50,7 @@ export interface Opinion {
   institution_id: string;
   user_id: string; // Internal association only
   author_username: string; // Public display pseudonym
+  author_avatar?: AvatarType; // Author avatar
   content: string;
   created_at: string;
   updated_at: string;
@@ -61,6 +65,7 @@ export interface Country {
 export interface PublicUserSession {
   id: string;
   username: string;
+  avatar: AvatarType;
   country: string;
   institution_id: string;
   institution_name: string;

@@ -64,6 +64,7 @@ export default function SignupFlow() {
 
   // Form Fields
   const [username, setUsername] = useState('');
+  const [avatar, setAvatar] = useState<'male' | 'female' | null>(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acknowledgedWarning, setAcknowledgedWarning] = useState(false);
@@ -188,7 +189,11 @@ export default function SignupFlow() {
   const passwordStrength = getPasswordStrength();
 
   // Navigation handlers
-  const canProceedStep1 = username.length >= 3 && usernameAvailable === true && !usernameChecking;
+  const canProceedStep1 =
+    username.length >= 3 &&
+    usernameAvailable === true &&
+    !usernameChecking &&
+    (avatar === 'male' || avatar === 'female');
   const canProceedStep2 =
     password.length >= 6 &&
     password === confirmPassword &&
@@ -231,6 +236,7 @@ export default function SignupFlow() {
 
     const payload = {
       username: username.trim(),
+      avatar: (avatar || 'male') as 'male' | 'female',
       password,
       confirmPassword,
       country: selectedCountry,
@@ -405,6 +411,78 @@ export default function SignupFlow() {
                   ))}
                 </div>
               </div>
+            </div>
+
+            {/* Avatar Selection (Compulsory: Male or Female only) */}
+            <div className="space-y-3 pt-2 border-t border-slate-800">
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-semibold text-slate-200">
+                  Choose your avatar <span className="text-red-400">*</span>
+                </label>
+                <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  Compulsory Choice
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                Select your student avatar (Male or Female). This avatar will be displayed alongside your anonymous pseudonym when you post reviews.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {/* Male Option */}
+                <button
+                  type="button"
+                  onClick={() => setAvatar('male')}
+                  className={`p-4 rounded-2xl border text-left transition flex items-center space-x-3.5 relative ${
+                    avatar === 'male'
+                      ? 'bg-indigo-600/20 border-indigo-500 ring-2 ring-indigo-500/40 text-white shadow-lg shadow-indigo-500/10'
+                      : 'bg-slate-800/60 border-slate-700/80 hover:bg-slate-800 hover:border-slate-600 text-slate-300'
+                  }`}
+                >
+                  <div className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center text-3xl shrink-0 shadow-inner">
+                    👨‍🎓
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center space-x-1.5">
+                      <p className="text-sm font-bold text-white">Male Student</p>
+                      {avatar === 'male' && (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-400 mt-0.5">Male avatar representation</p>
+                  </div>
+                </button>
+
+                {/* Female Option */}
+                <button
+                  type="button"
+                  onClick={() => setAvatar('female')}
+                  className={`p-4 rounded-2xl border text-left transition flex items-center space-x-3.5 relative ${
+                    avatar === 'female'
+                      ? 'bg-indigo-600/20 border-indigo-500 ring-2 ring-indigo-500/40 text-white shadow-lg shadow-indigo-500/10'
+                      : 'bg-slate-800/60 border-slate-700/80 hover:bg-slate-800 hover:border-slate-600 text-slate-300'
+                  }`}
+                >
+                  <div className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center text-3xl shrink-0 shadow-inner">
+                    👩‍🎓
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center space-x-1.5">
+                      <p className="text-sm font-bold text-white">Female Student</p>
+                      {avatar === 'female' && (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-400 mt-0.5">Female avatar representation</p>
+                  </div>
+                </button>
+              </div>
+
+              {!avatar && (
+                <p className="text-xs text-amber-400/90 flex items-center space-x-1.5 pt-1">
+                  <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                  <span>Please choose your avatar (Male or Female) to continue.</span>
+                </p>
+              )}
             </div>
 
             {/* Step 1 Actions */}
@@ -956,6 +1034,14 @@ export default function SignupFlow() {
               </div>
 
               <div className="flex items-center justify-between pb-3 border-b border-slate-700">
+                <span className="text-xs uppercase font-semibold text-slate-400">Avatar</span>
+                <span className="text-sm font-semibold text-slate-200 flex items-center space-x-2">
+                  <span className="text-xl">{avatar === 'female' ? '👩‍🎓' : '👨‍🎓'}</span>
+                  <span className="capitalize">{avatar} Student</span>
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between pb-3 border-b border-slate-700">
                 <span className="text-xs uppercase font-semibold text-slate-400">Country</span>
                 <span className="text-sm font-semibold text-slate-200 flex items-center space-x-1.5">
                   <span>{selectedCountryObj?.flag}</span>
@@ -1044,7 +1130,10 @@ export default function SignupFlow() {
             <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700 max-w-sm mx-auto text-left space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-400">Signed in as:</span>
-                <span className="font-bold text-emerald-400 font-mono">@{username}</span>
+                <span className="font-bold text-emerald-400 font-mono flex items-center space-x-1.5">
+                  <span>{avatar === 'female' ? '👩‍🎓' : '👨‍🎓'}</span>
+                  <span>@{username}</span>
+                </span>
               </div>
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-400">Enrolled at:</span>

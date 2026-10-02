@@ -25,6 +25,7 @@ export async function GET(
     id: op.id,
     institution_id: op.institution_id,
     author_username: op.author_username,
+    author_avatar: op.author_avatar || 'male',
     content: op.content,
     created_at: op.created_at,
     is_current_user: currentUser ? op.user_id === currentUser.id : false,

@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       username,
+      avatar,
       password,
       confirmPassword,
       country,
@@ -15,7 +16,15 @@ export async function POST(req: NextRequest) {
       acknowledgedRecoveryWarning,
     } = body;
 
-    // 1. Check Irreversible Password Warning Acknowledgement
+    // 1. Check Avatar (Compulsory: only 'male' or 'female')
+    if (!avatar || (avatar !== 'male' && avatar !== 'female')) {
+      return NextResponse.json(
+        { error: 'Choosing an avatar is compulsory. Please select either Male or Female.' },
+        { status: 400 }
+      );
+    }
+
+    // 2. Check Irreversible Password Warning Acknowledgement
     if (!acknowledgedRecoveryWarning) {
       return NextResponse.json(
         {
@@ -79,6 +88,7 @@ export async function POST(req: NextRequest) {
     // 6. Create User & Profile securely
     const { user, profile } = await db.createUser({
       username: username.trim(),
+      avatar,
       password,
       country: country.trim(),
       institution_id: finalInstitutionId,
@@ -92,6 +102,7 @@ export async function POST(req: NextRequest) {
       profile: {
         id: profile.id,
         username: profile.username,
+        avatar: profile.avatar,
         country: profile.country,
         institution_id: profile.institution_id,
         institution_name: profile.institution_name,

@@ -9,6 +9,7 @@ interface OpinionView {
   id: string;
   institution_id: string;
   author_username: string;
+  author_avatar?: 'male' | 'female';
   content: string;
   created_at: string;
   is_current_user?: boolean;
@@ -195,9 +196,12 @@ export default function OpinionSection({
                 className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-3"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs font-bold border border-indigo-500/30">
-                      <User className="w-4 h-4" />
+                  <div className="flex items-center space-x-2.5">
+                    <div
+                      className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm font-bold border border-indigo-500/30 shadow-sm"
+                      title={`${op.author_avatar || 'student'} avatar`}
+                    >
+                      <span>{op.author_avatar === 'female' ? '👩‍🎓' : '👨‍🎓'}</span>
                     </div>
                     <div>
                       <div className="flex items-center space-x-2">

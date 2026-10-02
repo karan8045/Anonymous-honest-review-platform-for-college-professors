@@ -48,6 +48,7 @@ export async function getCurrentUser(): Promise<PublicUserSession | null> {
   return {
     id: profile.id,
     username: profile.username,
+    avatar: profile.avatar || 'male',
     country: profile.country,
     institution_id: profile.institution_id,
     institution_name: profile.institution_name || 'Selected University',

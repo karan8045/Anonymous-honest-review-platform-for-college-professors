@@ -64,6 +64,7 @@ function getInitialSeedData(): DatabaseSchema {
         institution_id: 'inst-in-cusb',
         user_id: seedUserId,
         author_username: seedUsername,
+        author_avatar: 'male',
         content:
           'Central University of South Bihar has a modern and serene campus in Gaya. Faculty members in the Life Sciences and Law departments are exceptionally dedicated, and research labs are constantly expanding with modern equipment.',
         created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
@@ -74,6 +75,7 @@ function getInitialSeedData(): DatabaseSchema {
         institution_id: 'inst-in-curaj',
         user_id: seedUserId,
         author_username: 'student_x',
+        author_avatar: 'female',
         content:
           'The Bandarsindri campus is quiet and great for academic focus. Central library is well-stocked and active 24/7 during exam weeks. Highly recommend the Computer Science and Physics programs.',
         created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
@@ -84,6 +86,7 @@ function getInitialSeedData(): DatabaseSchema {
         institution_id: 'inst-in-iitb',
         user_id: seedUserId,
         author_username: 'anonymous_coder',
+        author_avatar: 'male',
         content:
           'IIT Bombay tech culture is truly world-class. From Mood Indigo to cutting-edge AI research groups, peer learning here is unmatched anywhere in the region.',
         created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
@@ -187,12 +190,17 @@ class Database {
 
   async createUser(params: {
     username: string;
+    avatar: 'male' | 'female';
     password: string;
     country: string;
     institution_id: string;
   }): Promise<{ user: User; profile: Profile }> {
     this.refresh();
-    const { username, password, country, institution_id } = params;
+    const { username, avatar, password, country, institution_id } = params;
+
+    if (!avatar || (avatar !== 'male' && avatar !== 'female')) {
+      throw new Error('Avatar selection is compulsory. Please select either Male or Female avatar.');
+    }
 
     const validation = this.isUsernameValid(username);
     if (!validation.valid) {
@@ -225,6 +233,7 @@ class Database {
     const newProfile: Profile = {
       id: userId,
       username: username.trim(),
+      avatar,
       country: country.trim(),
       institution_id,
       institution_name: inst ? inst.name : undefined,
@@ -268,6 +277,7 @@ class Database {
     const inst = this.data.institutions.find(i => i.id === profile.institution_id);
     return {
       ...profile,
+      avatar: profile.avatar || 'male',
       institution_name: inst ? inst.name : profile.institution_name,
     };
   }
@@ -597,6 +607,7 @@ class Database {
 
     const profile = this.data.profiles.find(p => p.id === user_id);
     const author_username = profile ? profile.username : 'anonymous_student';
+    const author_avatar = profile ? (profile.avatar || 'male') : 'male';
 
     const now = new Date().toISOString();
     const newOpinion: Opinion = {
@@ -604,6 +615,7 @@ class Database {
       institution_id,
       user_id,
       author_username,
+      author_avatar,
       content: trimmed,
       created_at: now,
       updated_at: now,

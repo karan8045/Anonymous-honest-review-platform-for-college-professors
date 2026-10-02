@@ -67,8 +67,8 @@ export default function ProfilePage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-indigo-600 p-0.5 shadow-lg shadow-emerald-500/10">
-              <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                <Shield className="w-8 h-8 text-emerald-400" />
+              <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-3xl">
+                <span>{user.avatar === 'female' ? '👩‍🎓' : '👨‍🎓'}</span>
               </div>
             </div>
             <div>
@@ -78,6 +78,9 @@ export default function ProfilePage() {
                 </h1>
                 <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                   Active Pseudonym
+                </span>
+                <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 capitalize">
+                  {user.avatar} Student
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-1 flex items-center space-x-3">

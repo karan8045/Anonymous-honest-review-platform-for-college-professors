@@ -66,10 +66,10 @@ export default function Navbar() {
                 <Link
                   href="/profile"
                   className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-750 px-3 py-1.5 rounded-full border border-slate-700 transition"
-                  title="View your anonymous account activity"
+                  title={`View your anonymous account (${user.avatar || 'student'})`}
                 >
                   <div className="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs font-bold">
-                    <UserIcon className="w-3.5 h-3.5" />
+                    <span>{user.avatar === 'female' ? '👩‍🎓' : '👨‍🎓'}</span>
                   </div>
                   <span className="text-sm font-medium text-slate-200">
                     @{user.username}
@@ -113,7 +113,7 @@ export default function Navbar() {
                 href="/profile"
                 className="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-full border border-slate-700 flex items-center space-x-1"
               >
-                <UserIcon className="w-3 h-3 text-emerald-400" />
+                <span>{user.avatar === 'female' ? '👩‍🎓' : '👨‍🎓'}</span>
                 <span>@{user.username}</span>
               </Link>
             )}
@@ -153,7 +153,7 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center space-x-2 text-sm text-slate-200 py-1"
               >
-                <UserIcon className="w-4 h-4 text-emerald-400" />
+                <span className="text-base">{user.avatar === 'female' ? '👩‍🎓' : '👨‍🎓'}</span>
                 <span>My Anonymous Account (@{user.username})</span>
               </Link>
               <button

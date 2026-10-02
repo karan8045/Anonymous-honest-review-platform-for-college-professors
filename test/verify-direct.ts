@@ -59,12 +59,13 @@ async function runDirectTests() {
       'Different word order "South Bihar Central" matches'
     );
 
-    // 3. User Registration (Password Hashing & Account Creation)
+    // 3. User Registration (Password Hashing, Avatar & Account Creation)
     console.log('\n--- 3. Testing User Registration & Password Hashing ---');
     const testUsername = 'anon_test_' + Date.now();
     const cusbInst = centResults.find(i => i.name === 'Central University of South Bihar')!;
     const { user, profile } = await db.createUser({
       username: testUsername,
+      avatar: 'male',
       password: 'MySecretPassword123!',
       country: 'India',
       institution_id: cusbInst.id,
@@ -75,12 +76,43 @@ async function runDirectTests() {
     assert(user.password_hash.startsWith('$2'), 'Password hashed with bcrypt');
     assert(profile.country === 'India', 'Profile contains country');
     assert(profile.institution_id === cusbInst.id, 'Profile linked to selected institution');
+    assert(profile.avatar === 'male', 'Profile contains selected compulsory avatar');
+
+    // Compulsory Avatar validation tests: missing avatar or invalid avatar must fail
+    let avatarCompulsoryFailed = false;
+    try {
+      await db.createUser({
+        username: 'no_avatar_' + Date.now(),
+        avatar: (null as any),
+        password: 'ValidPassword123!',
+        country: 'India',
+        institution_id: cusbInst.id,
+      });
+    } catch {
+      avatarCompulsoryFailed = true;
+    }
+    assert(avatarCompulsoryFailed, 'Compulsory avatar: Missing avatar is strictly rejected');
+
+    let avatarInvalidFailed = false;
+    try {
+      await db.createUser({
+        username: 'invalid_avatar_' + Date.now(),
+        avatar: ('other' as any),
+        password: 'ValidPassword123!',
+        country: 'India',
+        institution_id: cusbInst.id,
+      });
+    } catch {
+      avatarInvalidFailed = true;
+    }
+    assert(avatarInvalidFailed, 'Compulsory avatar: Non male/female option is strictly rejected');
 
     // Duplicate username test
     let dupFailed = false;
     try {
       await db.createUser({
         username: testUsername,
+        avatar: 'male',
         password: 'AnotherPassword',
         country: 'India',
         institution_id: cusbInst.id,
@@ -95,6 +127,7 @@ async function runDirectTests() {
     try {
       await db.createUser({
         username: testUsername.toUpperCase(),
+        avatar: 'female',
         password: 'AnotherPassword',
         country: 'India',
         institution_id: cusbInst.id,
@@ -170,6 +203,7 @@ async function runDirectTests() {
       content: 'CUSB has modern laboratories and excellent library resources.',
     });
     assert(op1.author_username === testUsername, 'Opinion displays pseudonym username only');
+    assert(op1.author_avatar === 'male', 'Opinion contains author compulsory avatar');
 
     const op2 = db.createOpinion({
       institution_id: cusbInst.id,

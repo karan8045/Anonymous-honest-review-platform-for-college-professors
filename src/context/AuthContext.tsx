@@ -9,6 +9,7 @@ interface AuthContextType {
   signIn: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signUp: (data: {
     username: string;
+    avatar: 'male' | 'female';
     password: string;
     confirmPassword: string;
     country: string;
@@ -66,6 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (formData: {
     username: string;
+    avatar: 'male' | 'female';
     password: string;
     confirmPassword: string;
     country: string;

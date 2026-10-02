@@ -33,6 +33,7 @@ CREATE INDEX IF NOT EXISTS idx_institutions_verified ON public.institutions (ver
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     username TEXT NOT NULL UNIQUE,
+    avatar TEXT NOT NULL CHECK (avatar IN ('male', 'female')),
     country TEXT NOT NULL,
     institution_id UUID REFERENCES public.institutions(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
