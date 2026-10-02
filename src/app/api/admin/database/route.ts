@@ -1,9 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { verifyAdminAccess } from '@/lib/admin-auth';
 import fs from 'fs';
 import path from 'path';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  if (!verifyAdminAccess(req)) {
+    return NextResponse.json(
+      { error: 'Unauthorized: Access to administrative database requires valid ADMIN_SECRET.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const DATA_DIR = path.join(process.cwd(), '.data');
     const DB_FILE = path.join(DATA_DIR, 'db.json');

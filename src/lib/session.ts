@@ -4,7 +4,17 @@ import { db } from './db';
 import { PublicUserSession } from './types';
 
 const SESSION_COOKIE_NAME = 'anon_session_token';
-const SESSION_SECRET = process.env.SESSION_SECRET || 'anonymous_platform_super_secret_key_9283748234';
+const DEV_FALLBACK_SECRET = 'anon_dev_secret_replace_in_production_env';
+const SESSION_SECRET: string =
+  process.env.SESSION_SECRET ||
+  (process.env.NODE_ENV === 'production'
+    ? (() => {
+        console.warn(
+          '⚠️ [SECURITY WARNING] SESSION_SECRET is not set in production. Generating an ephemeral random in-memory secret. Please set SESSION_SECRET in your production environment variables to maintain session persistence across redeployments.'
+        );
+        return crypto.randomBytes(32).toString('hex');
+      })()
+    : DEV_FALLBACK_SECRET);
 
 // 30 days session
 const MAX_AGE = 60 * 60 * 24 * 30;

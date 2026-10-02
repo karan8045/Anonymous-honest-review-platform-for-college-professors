@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { verifyAdminAccess } from '@/lib/admin-auth';
 
 export async function POST(req: NextRequest) {
+  if (!verifyAdminAccess(req)) {
+    return NextResponse.json(
+      { error: 'Unauthorized: Administrative merge requires valid ADMIN_SECRET.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await req.json();
     const { sourceId, targetId } = body;
