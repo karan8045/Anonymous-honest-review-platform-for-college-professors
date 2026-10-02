@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { setSessionCookie } from '@/lib/session';
+import { syncProfileToSupabase } from '@/lib/supabase-sync';
 
 export async function POST(req: NextRequest) {
   try {
@@ -92,6 +93,16 @@ export async function POST(req: NextRequest) {
       password,
       country: country.trim(),
       institution_id: finalInstitutionId,
+    });
+
+    // 6b. Automatically sync signup to Supabase when configured
+    await syncProfileToSupabase({
+      id: profile.id,
+      username: profile.username,
+      name: profile.name || profile.username,
+      avatar: profile.avatar,
+      country: profile.country,
+      institution_id: profile.institution_id,
     });
 
     // 7. Establish persistent session

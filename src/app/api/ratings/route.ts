@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { getCurrentUser } from '@/lib/session';
+import { syncRatingToSupabase } from '@/lib/supabase-sync';
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,6 +36,15 @@ export async function POST(req: NextRequest) {
       institution_id,
       user_id: user.id,
       score: scoreNum,
+    });
+
+    await syncRatingToSupabase({
+      id: rating.id,
+      institution_id: rating.institution_id,
+      user_id: rating.user_id,
+      username: rating.username,
+      name: rating.name,
+      score: rating.score,
     });
 
     const updatedInst = db.getInstitutionById(institution_id);

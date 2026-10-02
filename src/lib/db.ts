@@ -27,84 +27,12 @@ function generateUUID(): string {
 }
 
 function getInitialSeedData(): DatabaseSchema {
-  // Initial seed opinions to make the platform immediately rich and engaging
-  const seedUserId = 'u0000000-0000-0000-0000-000000000001';
-  const seedUsername = 'campusvoice';
-
   return {
     users: [],
     profiles: [],
     institutions: [...SEED_INSTITUTIONS],
-    ratings: [
-      {
-        id: 'r-cusb-1',
-        institution_id: 'inst-in-cusb',
-        user_id: seedUserId,
-        username: seedUsername,
-        name: 'Central University of South Bihar',
-        score: 5,
-        created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-      },
-      {
-        id: 'r-curaj-1',
-        institution_id: 'inst-in-curaj',
-        user_id: seedUserId,
-        username: seedUsername,
-        name: 'Central University of Rajasthan',
-        score: 4,
-        created_at: new Date(Date.now() - 86400000 * 4).toISOString(),
-      },
-      {
-        id: 'r-mit-1',
-        institution_id: 'inst-us-mit',
-        user_id: seedUserId,
-        username: seedUsername,
-        name: 'Massachusetts Institute of Technology',
-        score: 5,
-        created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
-      },
-    ],
-    opinions: [
-      {
-        id: 'op-cusb-1',
-        institution_id: 'inst-in-cusb',
-        user_id: seedUserId,
-        username: seedUsername,
-        name: 'Central University of South Bihar',
-        author_username: seedUsername,
-        author_avatar: 'male',
-        content:
-          'Central University of South Bihar has a modern and serene campus in Gaya. Faculty members in the Life Sciences and Law departments are exceptionally dedicated, and research labs are constantly expanding with modern equipment.',
-        created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-        updated_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-      },
-      {
-        id: 'op-curaj-1',
-        institution_id: 'inst-in-curaj',
-        user_id: seedUserId,
-        username: 'student_x',
-        name: 'Central University of Rajasthan',
-        author_username: 'student_x',
-        author_avatar: 'female',
-        content:
-          'The Bandarsindri campus is quiet and great for academic focus. Central library is well-stocked and active 24/7 during exam weeks. Highly recommend the Computer Science and Physics programs.',
-        created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
-        updated_at: new Date(Date.now() - 86400000 * 3).toISOString(),
-      },
-      {
-        id: 'op-iitb-1',
-        institution_id: 'inst-in-iitb',
-        user_id: seedUserId,
-        username: 'anonymous_coder',
-        name: 'Indian Institute of Technology Bombay',
-        author_username: 'anonymous_coder',
-        author_avatar: 'male',
-        content:
-          'IIT Bombay tech culture is truly world-class. From Mood Indigo to cutting-edge AI research groups, peer learning here is unmatched anywhere in the region.',
-        created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-        updated_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-      },
-    ],
+    ratings: [],
+    opinions: [],
   };
 }
 
@@ -113,6 +41,17 @@ class Database {
 
   constructor() {
     this.data = this.load();
+  }
+
+  public resetDatabase(): void {
+    this.data = {
+      users: [],
+      profiles: [],
+      institutions: [...SEED_INSTITUTIONS],
+      ratings: [],
+      opinions: [],
+    };
+    this.save();
   }
 
   private load(): DatabaseSchema {

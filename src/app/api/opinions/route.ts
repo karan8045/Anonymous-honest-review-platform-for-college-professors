@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { getCurrentUser } from '@/lib/session';
+import { syncOpinionToSupabase } from '@/lib/supabase-sync';
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,6 +41,15 @@ export async function POST(req: NextRequest) {
       institution_id,
       user_id: user.id,
       content: trimmed,
+    });
+
+    await syncOpinionToSupabase({
+      id: opinion.id,
+      institution_id: opinion.institution_id,
+      user_id: opinion.user_id,
+      username: opinion.username || opinion.author_username,
+      name: opinion.name,
+      content: opinion.content,
     });
 
     return NextResponse.json({

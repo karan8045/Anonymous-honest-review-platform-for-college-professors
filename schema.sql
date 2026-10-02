@@ -85,6 +85,11 @@ ALTER TABLE public.ratings ADD COLUMN IF NOT EXISTS name TEXT;
 ALTER TABLE public.opinions ADD COLUMN IF NOT EXISTS username TEXT;
 ALTER TABLE public.opinions ADD COLUMN IF NOT EXISTS name TEXT;
 
+-- Drop foreign keys to auth.users if present to support direct app sync
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_id_fkey;
+ALTER TABLE public.ratings DROP CONSTRAINT IF EXISTS ratings_user_id_fkey;
+ALTER TABLE public.opinions DROP CONSTRAINT IF EXISTS opinions_user_id_fkey;
+
 -- =========================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- Ensures total pseudonymity: Users only see public usernames, never auth IDs or emails.
@@ -115,16 +120,16 @@ CREATE POLICY "Public profiles are viewable by everyone"
     ON public.profiles FOR SELECT 
     USING (true);
 
--- Users can insert and update their own profile only
+-- Users can insert and update their own profile
 DROP POLICY IF EXISTS "Users can create their own profile" ON public.profiles;
 CREATE POLICY "Users can create their own profile" 
     ON public.profiles FOR INSERT 
-    WITH CHECK (auth.uid() = id);
+    WITH CHECK (auth.uid() = id OR auth.role() = 'service_role' OR auth.role() = 'anon');
 
 DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile" 
     ON public.profiles FOR UPDATE 
-    USING (auth.uid() = id);
+    USING (auth.uid() = id OR auth.role() = 'service_role');
 
 -- Ratings RLS
 -- Everyone can read ratings summary/aggregates
@@ -133,17 +138,17 @@ CREATE POLICY "Ratings are viewable by everyone"
     ON public.ratings FOR SELECT 
     USING (true);
 
--- Authenticated users can insert their own rating (enforced by UNIQUE constraint)
+-- Users can insert their own rating (enforced by UNIQUE constraint)
 DROP POLICY IF EXISTS "Users can insert their own rating" ON public.ratings;
 CREATE POLICY "Users can insert their own rating" 
     ON public.ratings FOR INSERT 
-    WITH CHECK (auth.uid() = user_id);
+    WITH CHECK (auth.uid() = user_id OR auth.role() = 'service_role' OR auth.role() = 'anon');
 
 -- Authenticated users can update their own rating
 DROP POLICY IF EXISTS "Users can update their own rating" ON public.ratings;
 CREATE POLICY "Users can update their own rating" 
     ON public.ratings FOR UPDATE 
-    USING (auth.uid() = user_id);
+    USING (auth.uid() = user_id OR auth.role() = 'service_role');
 
 -- Opinions RLS
 -- Anyone can read opinions
@@ -152,11 +157,11 @@ CREATE POLICY "Opinions are viewable by everyone"
     ON public.opinions FOR SELECT 
     USING (true);
 
--- Authenticated users can insert opinions
+-- Users can insert opinions
 DROP POLICY IF EXISTS "Users can insert their own opinions" ON public.opinions;
 CREATE POLICY "Users can insert their own opinions" 
     ON public.opinions FOR INSERT 
-    WITH CHECK (auth.uid() = user_id);
+    WITH CHECK (auth.uid() = user_id OR auth.role() = 'service_role' OR auth.role() = 'anon');
 
 -- Explicitly NO DELETE POLICY for public users (opinions cannot be deleted by users).
 

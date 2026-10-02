@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "./node_modules/typescript/bin/tsc -p tsconfig.test.json && node dist-test/test/verify-direct.js"
+    "test": "./node_modules/typescript/bin/tsc -p tsconfig.test.json && node dist-test/test/verify-direct.js",
+    "clear-db": "./node_modules/typescript/bin/tsc -p tsconfig.test.json && node dist-test/scripts/clear-database.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

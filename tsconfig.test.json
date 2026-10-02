@@ -11,5 +11,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/lib/**/*", "test/**/*"]
+  "include": ["src/lib/**/*", "test/**/*", "scripts/**/*"]
 }
