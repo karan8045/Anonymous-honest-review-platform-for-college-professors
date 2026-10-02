@@ -157,7 +157,7 @@ export default function SignupFlow() {
       try {
         const q = encodeURIComponent(searchQuery.trim());
         const c = encodeURIComponent(selectedCountry);
-        const res = await fetch(`/api/institutions?country=${c}&q=${q}&limit=8`);
+        const res = await fetch(`/api/institutions?country=${c}&q=${q}&limit=35`);
         const data = await res.json();
         setSearchResults(data.institutions || []);
       } catch {
@@ -705,6 +705,40 @@ export default function SignupFlow() {
                 )}
               </div>
 
+              {/* Quick Category Filters for Indian Universities */}
+              {selectedCountry === 'India' && (
+                <div className="pt-1 pb-1">
+                  <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 text-[11px] custom-scrollbar">
+                    <span className="text-slate-500 font-medium shrink-0 mr-1">Quick:</span>
+                    {[
+                      { label: 'All India', query: '' },
+                      { label: 'Central Univs', query: 'Central University' },
+                      { label: 'IITs', query: 'Indian Institute of Technology' },
+                      { label: 'NITs', query: 'National Institute of Technology' },
+                      { label: 'IIITs', query: 'Information Technology' },
+                      { label: 'AIIMS / Medical', query: 'AIIMS' },
+                      { label: 'IIMs', query: 'Management' },
+                      { label: 'NLUs / Law', query: 'Law' },
+                      { label: 'Delhi Univ (DU)', query: 'University of Delhi' },
+                      { label: 'BITS / Private', query: 'Pilani' },
+                    ].map(cat => (
+                      <button
+                        key={cat.label}
+                        type="button"
+                        onClick={() => setSearchQuery(cat.query)}
+                        className={`px-2.5 py-1 rounded-lg border shrink-0 transition text-xs ${
+                          searchQuery === cat.query
+                            ? 'bg-indigo-600/40 border-indigo-500 text-white font-semibold'
+                            : 'bg-slate-800/80 hover:bg-slate-750 text-slate-300 border-slate-700'
+                        }`}
+                      >
+                        {cat.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Currently Selected Institution Pill */}
               {selectedInstitution && !isManualInstitution && (
                 <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between">
@@ -740,7 +774,7 @@ export default function SignupFlow() {
               </div>
 
               {searchResults.length > 0 ? (
-                <div className="max-h-60 overflow-y-auto divide-y divide-slate-800/60 custom-scrollbar">
+                <div className="max-h-80 overflow-y-auto divide-y divide-slate-800/60 custom-scrollbar">
                   {searchResults.map(inst => {
                     const isSelected = selectedInstitution?.id === inst.id && !isManualInstitution;
                     return (

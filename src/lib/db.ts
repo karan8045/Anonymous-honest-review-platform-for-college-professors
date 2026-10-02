@@ -108,14 +108,28 @@ class Database {
       if (fs.existsSync(DB_FILE)) {
         const fileContent = fs.readFileSync(DB_FILE, 'utf-8');
         const parsed = JSON.parse(fileContent);
-        // Ensure all required collections exist
-        return {
+        // Sync any new seed institutions that aren't in the saved database yet
+        const existingIds = new Set((parsed.institutions || []).map((i: any) => i.id));
+        const mergedInstitutions = [...(parsed.institutions || [])];
+        let hasNew = false;
+        for (const seed of SEED_INSTITUTIONS) {
+          if (!existingIds.has(seed.id)) {
+            mergedInstitutions.push(seed);
+            existingIds.add(seed.id);
+            hasNew = true;
+          }
+        }
+        const state: DatabaseSchema = {
           users: parsed.users || [],
           profiles: parsed.profiles || [],
-          institutions: parsed.institutions || [...SEED_INSTITUTIONS],
+          institutions: mergedInstitutions,
           ratings: parsed.ratings || [],
           opinions: parsed.opinions || [],
         };
+        if (hasNew) {
+          this.save(state);
+        }
+        return state;
       }
     } catch (e) {
       console.error('Error loading db.json, initializing seed data:', e);
