@@ -58,6 +58,20 @@ export default function HomePage() {
         <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+          {/* Official Emblem Logo */}
+          <div className="flex justify-center">
+            <div className="relative group">
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-emerald-500/30 to-indigo-500/30 rounded-3xl blur-xl opacity-70 group-hover:opacity-100 transition duration-500" />
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900/90 flex items-center justify-center p-1 backdrop-blur-md">
+                <img
+                  src="/logo-icon.png"
+                  alt="CampusAnon Emblem"
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-semibold shadow-inner">
             <Shield className="w-4 h-4" />
             <span>100% Pseudonymous Student Review Platform</span>

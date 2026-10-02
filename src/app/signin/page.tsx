@@ -45,10 +45,12 @@ export default function SignInPage() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-500 to-emerald-400 p-0.5 mx-auto mb-3 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <Shield className="w-6 h-6 text-emerald-400" />
-              </div>
+            <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-700/80 mx-auto mb-3 shadow-xl bg-slate-950 flex items-center justify-center p-0.5">
+              <img
+                src="/logo-icon.png"
+                alt="CampusAnon Logo"
+                className="w-full h-full object-cover rounded-xl"
+              />
             </div>
             <h1 className="text-2xl font-bold text-white tracking-tight">
               Sign In to Your Anonymous Account

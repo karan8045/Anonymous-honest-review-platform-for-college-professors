@@ -15,10 +15,12 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo & Platform Name */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-emerald-400 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <Shield className="w-5 h-5 text-emerald-400" />
-              </div>
+            <div className="w-10 h-10 rounded-xl overflow-hidden border border-slate-700/80 shadow-lg shadow-emerald-500/10 group-hover:scale-105 transition-transform bg-slate-950 flex items-center justify-center">
+              <img
+                src="/logo-icon.png"
+                alt="CampusAnon Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <div className="flex items-center space-x-2">

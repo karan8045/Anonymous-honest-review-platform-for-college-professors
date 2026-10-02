@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: 'CampusAnon | Anonymous Honest Review Platform for Colleges & Universities',
   description:
     'A persistent anonymous platform for honest college reviews. Zero email, zero phone numbers, total pseudonymity.',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/logo-icon.png',
+  },
 };
 
 export default function RootLayout({
@@ -23,7 +28,11 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <footer className="border-t border-slate-900 bg-slate-950 py-10 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500 space-y-3">
             <div className="flex items-center justify-center space-x-2 text-slate-400 font-semibold">
-              <Shield className="w-4 h-4 text-emerald-400" />
+              <img
+                src="/logo-icon.png"
+                alt="CampusAnon"
+                className="w-5 h-5 rounded-full object-cover border border-slate-700/60"
+              />
               <span>CampusAnon Zero-PII Anonymous Platform</span>
             </div>
             <p className="max-w-xl mx-auto text-slate-400 leading-relaxed text-[11px]">
