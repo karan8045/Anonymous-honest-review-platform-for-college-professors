@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { Shield, User as UserIcon, LogOut, BookOpen, Layers, Menu, X, Lock } from 'lucide-react';
+import { Shield, User as UserIcon, LogOut, BookOpen, Layers, Menu, X, Lock, Database } from 'lucide-react';
 
 export default function Navbar() {
   const { user, signOut } = useAuth();
@@ -50,7 +50,15 @@ export default function Navbar() {
               className="text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors flex items-center space-x-1.5"
             >
               <Layers className="w-4 h-4 text-amber-400" />
-              <span>Directory Admin</span>
+              <span>Institutions Admin</span>
+            </Link>
+
+            <Link
+              href="/admin"
+              className="text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors flex items-center space-x-1.5"
+            >
+              <Database className="w-4 h-4 text-emerald-400" />
+              <span>Admin Database</span>
             </Link>
 
             {user ? (
