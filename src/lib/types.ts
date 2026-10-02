@@ -12,6 +12,7 @@ export interface User {
 export interface Profile {
   id: string; // References User.id
   username: string;
+  name?: string;
   avatar: AvatarType; // Compulsory avatar selection: only 'male' or 'female'
   country: string;
   institution_id: string;
@@ -40,6 +41,8 @@ export interface Rating {
   id: string;
   institution_id: string;
   user_id: string; // Internal association only
+  username?: string;
+  name?: string;
   score: number; // 1 to 5
   created_at: string;
   updated_at?: string;
@@ -49,6 +52,8 @@ export interface Opinion {
   id: string;
   institution_id: string;
   user_id: string; // Internal association only
+  username?: string;
+  name?: string;
   author_username: string; // Public display pseudonym
   author_avatar?: AvatarType; // Author avatar
   content: string;

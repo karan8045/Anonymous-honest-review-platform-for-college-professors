@@ -33,6 +33,7 @@ CREATE INDEX IF NOT EXISTS idx_institutions_verified ON public.institutions (ver
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     username TEXT NOT NULL UNIQUE,
+    name TEXT,
     avatar TEXT NOT NULL CHECK (avatar IN ('male', 'female')),
     country TEXT NOT NULL,
     institution_id UUID REFERENCES public.institutions(id) ON DELETE SET NULL,
@@ -49,6 +50,8 @@ CREATE TABLE IF NOT EXISTS public.ratings (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     institution_id UUID NOT NULL REFERENCES public.institutions(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    username TEXT,
+    name TEXT,
     score INT NOT NULL CHECK (score >= 1 AND score <= 5),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -65,6 +68,8 @@ CREATE TABLE IF NOT EXISTS public.opinions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     institution_id UUID NOT NULL REFERENCES public.institutions(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    username TEXT,
+    name TEXT,
     content TEXT NOT NULL CHECK (char_length(trim(content)) >= 10 AND char_length(content) <= 3000),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -72,6 +77,13 @@ CREATE TABLE IF NOT EXISTS public.opinions (
 
 CREATE INDEX IF NOT EXISTS idx_opinions_institution ON public.opinions (institution_id);
 CREATE INDEX IF NOT EXISTS idx_opinions_created_at ON public.opinions (created_at DESC);
+
+-- Automatic schema migration / column guarantees if tables already exist:
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS name TEXT;
+ALTER TABLE public.ratings ADD COLUMN IF NOT EXISTS username TEXT;
+ALTER TABLE public.ratings ADD COLUMN IF NOT EXISTS name TEXT;
+ALTER TABLE public.opinions ADD COLUMN IF NOT EXISTS username TEXT;
+ALTER TABLE public.opinions ADD COLUMN IF NOT EXISTS name TEXT;
 
 -- =========================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES

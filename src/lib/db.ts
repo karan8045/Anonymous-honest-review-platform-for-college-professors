@@ -40,6 +40,8 @@ function getInitialSeedData(): DatabaseSchema {
         id: 'r-cusb-1',
         institution_id: 'inst-in-cusb',
         user_id: seedUserId,
+        username: seedUsername,
+        name: 'Central University of South Bihar',
         score: 5,
         created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
       },
@@ -47,6 +49,8 @@ function getInitialSeedData(): DatabaseSchema {
         id: 'r-curaj-1',
         institution_id: 'inst-in-curaj',
         user_id: seedUserId,
+        username: seedUsername,
+        name: 'Central University of Rajasthan',
         score: 4,
         created_at: new Date(Date.now() - 86400000 * 4).toISOString(),
       },
@@ -54,6 +58,8 @@ function getInitialSeedData(): DatabaseSchema {
         id: 'r-mit-1',
         institution_id: 'inst-us-mit',
         user_id: seedUserId,
+        username: seedUsername,
+        name: 'Massachusetts Institute of Technology',
         score: 5,
         created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
       },
@@ -63,6 +69,8 @@ function getInitialSeedData(): DatabaseSchema {
         id: 'op-cusb-1',
         institution_id: 'inst-in-cusb',
         user_id: seedUserId,
+        username: seedUsername,
+        name: 'Central University of South Bihar',
         author_username: seedUsername,
         author_avatar: 'male',
         content:
@@ -74,6 +82,8 @@ function getInitialSeedData(): DatabaseSchema {
         id: 'op-curaj-1',
         institution_id: 'inst-in-curaj',
         user_id: seedUserId,
+        username: 'student_x',
+        name: 'Central University of Rajasthan',
         author_username: 'student_x',
         author_avatar: 'female',
         content:
@@ -85,6 +95,8 @@ function getInitialSeedData(): DatabaseSchema {
         id: 'op-iitb-1',
         institution_id: 'inst-in-iitb',
         user_id: seedUserId,
+        username: 'anonymous_coder',
+        name: 'Indian Institute of Technology Bombay',
         author_username: 'anonymous_coder',
         author_avatar: 'male',
         content:
@@ -233,6 +245,7 @@ class Database {
     const newProfile: Profile = {
       id: userId,
       username: username.trim(),
+      name: username.trim(),
       avatar,
       country: country.trim(),
       institution_id,
@@ -548,10 +561,13 @@ class Database {
       return this.data.ratings[existingIndex];
     }
 
+    const userProfile = this.data.profiles.find(p => p.id === user_id);
     const newRating: Rating = {
       id: generateUUID(),
       institution_id,
       user_id,
+      username: userProfile ? userProfile.username : undefined,
+      name: inst ? inst.name : undefined,
       score,
       created_at: now,
     };
@@ -614,6 +630,8 @@ class Database {
       id: generateUUID(),
       institution_id,
       user_id,
+      username: author_username,
+      name: inst ? inst.name : undefined,
       author_username,
       author_avatar,
       content: trimmed,

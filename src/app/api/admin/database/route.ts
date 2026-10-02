@@ -27,22 +27,29 @@ export async function GET() {
       created_at: u.created_at,
     }));
 
-    // Attach institution names to profiles, ratings, and opinions for easy reading
+    // Attach institution names and usernames to profiles, ratings, and opinions for easy reading
     const instMap = new Map((rawData.institutions || []).map((i: any) => [i.id, i.name]));
+    const userMap = new Map((rawData.users || []).map((u: any) => [u.id, u.username]));
 
     const enrichedProfiles = (rawData.profiles || []).map((p: any) => ({
       ...p,
+      username: p.username || userMap.get(p.id) || 'anonymous_user',
+      name: p.name || p.username || userMap.get(p.id) || 'anonymous_user',
       institution_name: instMap.get(p.institution_id) || p.institution_name || 'Not assigned',
     }));
 
     const enrichedRatings = (rawData.ratings || []).map((r: any) => ({
       ...r,
-      institution_name: instMap.get(r.institution_id) || 'Unknown College',
+      username: r.username || userMap.get(r.user_id) || 'anonymous_user',
+      name: r.name || instMap.get(r.institution_id) || 'Unknown College',
+      institution_name: r.name || instMap.get(r.institution_id) || 'Unknown College',
     }));
 
     const enrichedOpinions = (rawData.opinions || []).map((o: any) => ({
       ...o,
-      institution_name: instMap.get(o.institution_id) || 'Unknown College',
+      username: o.username || o.author_username || userMap.get(o.user_id) || 'anonymous_user',
+      name: o.name || instMap.get(o.institution_id) || 'Unknown College',
+      institution_name: o.name || instMap.get(o.institution_id) || 'Unknown College',
     }));
 
     const stats = {
