@@ -1,0 +1,62 @@
+import { Country } from './types';
+
+export const COUNTRIES: Country[] = [
+  { name: 'India', code: 'IN', flag: '🇮🇳' },
+  { name: 'United States', code: 'US', flag: '🇺🇸' },
+  { name: 'United Kingdom', code: 'GB', flag: '🇬🇧' },
+  { name: 'Canada', code: 'CA', flag: '🇨🇦' },
+  { name: 'Australia', code: 'AU', flag: '🇦🇺' },
+  { name: 'Germany', code: 'DE', flag: '🇩🇪' },
+  { name: 'France', code: 'FR', flag: '🇫🇷' },
+  { name: 'Singapore', code: 'SG', flag: '🇸🇬' },
+  { name: 'Japan', code: 'JP', flag: '🇯🇵' },
+  { name: 'China', code: 'CN', flag: '🇨🇳' },
+  { name: 'South Korea', code: 'KR', flag: '🇰🇷' },
+  { name: 'Netherlands', code: 'NL', flag: '🇳🇱' },
+  { name: 'Switzerland', code: 'CH', flag: '🇨🇭' },
+  { name: 'Sweden', code: 'SE', flag: '🇸🇪' },
+  { name: 'New Zealand', code: 'NZ', flag: '🇳🇿' },
+  { name: 'Ireland', code: 'IE', flag: '🇮🇪' },
+  { name: 'United Arab Emirates', code: 'AE', flag: '🇦🇪' },
+  { name: 'Saudi Arabia', code: 'SA', flag: '🇸🇦' },
+  { name: 'Malaysia', code: 'MY', flag: '🇲🇾' },
+  { name: 'South Africa', code: 'ZA', flag: '🇿🇦' },
+  { name: 'Brazil', code: 'BR', flag: '🇧🇷' },
+  { name: 'Mexico', code: 'MX', flag: '🇲🇽' },
+  { name: 'Italy', code: 'IT', flag: '🇮🇹' },
+  { name: 'Spain', code: 'ES', flag: '🇪🇸' },
+  { name: 'Russia', code: 'RU', flag: '🇷🇺' },
+  { name: 'Indonesia', code: 'ID', flag: '🇮🇩' },
+  { name: 'Pakistan', code: 'PK', flag: '🇵🇰' },
+  { name: 'Bangladesh', code: 'BD', flag: '🇧🇩' },
+  { name: 'Nigeria', code: 'NG', flag: '🇳🇬' },
+  { name: 'Egypt', code: 'EG', flag: '🇪🇬' },
+  { name: 'Turkey', code: 'TR', flag: '🇹🇷' },
+  { name: 'Argentina', code: 'AR', flag: '🇦🇷' },
+  { name: 'Chile', code: 'CL', flag: '🇨🇱' },
+  { name: 'Colombia', code: 'CO', flag: '🇨🇴' },
+  { name: 'Denmark', code: 'DK', flag: '🇩🇰' },
+  { name: 'Finland', code: 'FI', flag: '🇫🇮' },
+  { name: 'Norway', code: 'NO', flag: '🇳🇴' },
+  { name: 'Poland', code: 'PL', flag: '🇵🇱' },
+  { name: 'Portugal', code: 'PT', flag: '🇵🇹' },
+  { name: 'Belgium', code: 'BE', flag: '🇧🇪' },
+  { name: 'Austria', code: 'AT', flag: '🇦🇹' },
+  { name: 'Israel', code: 'IL', flag: '🇮🇱' },
+  { name: 'Philippines', code: 'PH', flag: '🇵🇭' },
+  { name: 'Vietnam', code: 'VN', flag: '🇻🇳' },
+  { name: 'Thailand', code: 'TH', flag: '🇹🇭' },
+  { name: 'Kenya', code: 'KE', flag: '🇰🇪' },
+  { name: 'Ghana', code: 'GH', flag: '🇬🇭' },
+  { name: 'Sri Lanka', code: 'LK', flag: '🇱🇰' },
+  { name: 'Nepal', code: 'NP', flag: '🇳🇵' },
+  { name: 'Hong Kong', code: 'HK', flag: '🇭🇰' },
+  { name: 'Taiwan', code: 'TW', flag: '🇹🇼' },
+];
+
+export function getCountryByCodeOrName(identifier: string): Country | undefined {
+  const norm = identifier.trim().toLowerCase();
+  return COUNTRIES.find(
+    c => c.code.toLowerCase() === norm || c.name.toLowerCase() === norm
+  );
+}
